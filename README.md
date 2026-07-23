@@ -52,6 +52,9 @@ Build CRUD endpoints for Customer, Product, and Order resources.
 - **Product fields**: `id`, `name`, `price`, `stock_on_hand`.
 - **Customer fields**: `id`, `name`, `email`.
 
+> [!TIP]
+> **MySQL Modeling Hint**: Since MySQL is relational and does not have native array types, you may model `line_items` and `status_history` using separate relational tables (e.g., `order_items` and `order_status_history` tables) or leverage MySQL's native `JSON` column data type. Document your design choice in `DECISIONS.md`.
+
 ### 6. Workflow Engine (State Machine)
 
 Orders must strictly follow the defined lifecycle. Invalid transitions (e.g., pending directly to shipped) must be rejected with a clear `4xx` error and never silently fail.
@@ -66,6 +69,9 @@ Every transition must append an entry to the `status_history` array acting as an
 | `processing` | `shipped` | Manual action via dashboard |
 | `shipped` | `delivered` | Scheduled job (polls mock carrier tracking status) |
 | `*` (Any Active) | `cancelled` | Manual action from any non-terminal state |
+
+> [!IMPORTANT]
+> **Terminal States**: `delivered` and `cancelled` are terminal states. Once an order enters these states, no further state transitions are permitted.
 
 ### 7. Concurrency & Stock Reservation
 
@@ -86,11 +92,19 @@ Implement a durable scheduled job (using cron, a task scheduler, or an in-proces
 
 Each order has a target time-to-ship (choose and document reasonable default durations). If an order sits in `paid`, `processing`, or `backordered` past its deadline, it must be automatically flagged as escalated and surfaced on the dashboard. This monitoring must survive server restarts.
 
+> [!NOTE]
+> **Escalation Design**: Escalation should be represented as a boolean flag or a metadata attribute (e.g., `is_escalated` or `escalated_at`), **not** as a state in the core workflow state machine. This allows the order to remain in its current state (such as `paid` or `backordered`) while being highlighted operationally.
+
 ### 10. Webhooks & Mocks
 
 - **Payment Webhook** (`POST /webhooks/payment`): Simulates a payment provider. Must be idempotent (calling it twice for the same order does not duplicate the audit log). Referencing a non-existent order returns `404`.
-- **Restock Webhook** (`POST /webhooks/restock`): Optional companion endpoint that reports replenished stock and moves eligible backordered orders to processing.
-- **Mock Carrier** (`GET /mock/carrier/:orderId/tracking`): Lives inside your application to stand in for a third-party shipping API. Returns randomized tracking statuses (`in_transit` or `delivered`).
+  - **Request Body**: `{ "order_id": "string_or_number" }`
+  - **Response**: `200 OK` with `{ "success": true, "message": "..." }`
+- **Restock Webhook** (`POST /webhooks/restock`): Reports replenished stock and moves eligible backordered orders to processing.
+  - **Request Body**: `{ "product_id": "string_or_number", "quantity": 10 }`
+  - **Response**: `200 OK` with `{ "success": true, "message": "..." }`
+- **Mock Carrier** (`GET /mock/carrier/:orderId/tracking`): Lives inside your application to stand in for a third-party shipping API.
+  - **Response**: `200 OK` with `{ "order_id": "...", "status": "in_transit" | "delivered" }`
 
 ### 11. Dashboard & End-of-Day Digest
 
@@ -102,7 +116,8 @@ Provide an interface that allows an ops user to:
 - View an End-of-Day Digest summarizing: orders fulfilled, orders escalated, orders backordered, and total revenue recognized.
 
 > [!NOTE]
-> The dashboard does not need to be a complex frontend framework. A simple server-rendered HTML page, or even a well-structured Postman workspace acting as the "dashboard" to trigger actions and view the digest, is perfectly acceptable. Keep your focus on the backend logic.
+> - **Revenue Recognition**: For the purposes of the End-of-Day Digest, revenue is considered "recognized" once the order transitions to the `paid` state.
+> - **Dashboard Simplicity**: The dashboard does not need to be a complex frontend framework. A simple server-rendered HTML page, or even a well-structured Postman workspace acting as the "dashboard" to trigger actions and view the digest, is perfectly acceptable. Keep your focus on the backend logic.
 
 ---
 
