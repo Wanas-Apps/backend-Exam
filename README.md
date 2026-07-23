@@ -26,9 +26,13 @@ Your mission: Build a backend system that owns the order lifecycle end-to-end, a
 - **Durability & Observability**: Automatic behaviors survive a process restart, and background processes are traceable through clear logging.
 - **Operational Visibility**: A dashboard allows our ops team to see what is in progress, stuck, backordered, and completed at a glance.
 
-## 3. Preferred Technology Stack
+## 3. Required Technology Stack
 
-While you may use any language, our core backend services rely heavily on Node.js, Java, and PostgreSQL (often paired with Angular on the frontend). Using these technologies is a strong plus. If you choose another stack, please briefly explain why in your `DECISIONS.md`.
+To align with our active stack, candidates **must** use the following technology stack for this challenge:
+- **Backend Framework**: Node.js (e.g., Express, NestJS)
+- **Database**: MySQL
+
+Using these technologies is required. If you use any specific database client or ORM (e.g., Sequelize, TypeORM, Prisma, or raw SQL), please document your choice and configuration in your `DECISIONS.md`.
 
 ## 4. Out of Scope (What NOT to build)
 
