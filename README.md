@@ -1,4 +1,12 @@
-# Wanas Apps Backend Engineering Challenge: Order Processing Automation Hub
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/white-logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/color-logo.svg">
+    <img alt="Wanas Apps" src="assets/color-logo.svg" width="350">
+  </picture>
+</p>
+
+# Backend Engineering Challenge: Order Processing Automation Hub
 
 Welcome to the Wanas Apps engineering challenge! We respect your time, so we have designed this task to be completed in roughly 2 to 3 days. Treat this timeframe as a ceiling — a smaller scope executed with high quality is always better than a large scope stretched thin.
 
