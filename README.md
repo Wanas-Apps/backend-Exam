@@ -12,11 +12,20 @@ Welcome to the Wanas Apps engineering challenge! We respect your time, so we hav
 
 ## 1. Background & Problem
 
-Our e-commerce order handling currently relies on a mix of manual dashboard steps, spreadsheets, and one-off scripts. As our order volume grows, this setup is breaking down in two critical ways:
-- **Stalled Orders**: Orders get stuck between stages (e.g., paid but never fulfilled) and nobody notices until a customer complains.
-- **Concurrency & Overselling**: When multiple orders come in simultaneously for a low-stock product, we oversell because stock is checked manually without reliable concurrency guards.
+At Wanas Apps, we are scaling our e-commerce platforms rapidly. Currently, our order processing pipeline is a patchwork of manual operations: a combination of admin dashboard clicks, spreadsheet tracking, and periodic manual stock updates. As transaction volumes surge, this system is failing in two critical, business-limiting ways:
 
-Your mission: Build a backend system that owns the order lifecycle end-to-end, automates transitions where possible, prevents overselling under concurrent load, and automatically surfaces stuck orders.
+1. **The "Silent Stall" Problem (SLA Violations)**:
+   Orders frequently get stuck in transition states (e.g., payment processed, but stock reservation or shipping label creation is delayed). Because we lack proactive monitoring, these stalled orders go unnoticed until frustrated customers contact support. This results in high customer support overhead and damaged brand trust.
+
+2. **The "Flash Sale" Concurrency Issue (Overselling)**:
+   When high-demand, low-stock items are sold (such as during flash sales or promotional campaigns), multiple customers attempt to purchase the same inventory simultaneously. Because stock level checks and reservation are not transaction-safe, database race conditions occur. We routinely promise inventory we don't have, leading to order cancellations, customer disappointment, and manual refund processing.
+
+### Your Mission
+Build **"Order Processing Automation Hub"**, a robust backend service designed to solve these operational pain points. Your system must own the order lifecycle end-to-end:
+- **Enforce** a strict state machine to prevent invalid state transitions.
+- **Guarantee** concurrency safety to eliminate overselling under heavy load.
+- **Automate** transitions through event triggers and scheduled background jobs.
+- **Identify and Escalate** stalled orders proactively to ensure we meet our Service Level Agreements (SLAs).
 
 ## 2. Core Goals
 
