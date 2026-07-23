@@ -28,9 +28,9 @@ Your mission: Build a backend system that owns the order lifecycle end-to-end, a
 
 ## 3. Required Technology Stack
 
-To align with our active stack, candidates **must** use the following technology stack for this challenge:
+To minimize local setup friction, candidates **must** use the following technology stack for this challenge:
 - **Backend Framework**: Node.js (e.g., Express, NestJS)
-- **Database**: MySQL
+- **Database**: SQLite
 
 Using these technologies is required. If you use any specific database client or ORM (e.g., Sequelize, TypeORM, Prisma, or raw SQL), please document your choice and configuration in your `DECISIONS.md`.
 
@@ -53,7 +53,7 @@ Build CRUD endpoints for Customer, Product, and Order resources.
 - **Customer fields**: `id`, `name`, `email`.
 
 > [!TIP]
-> **MySQL Modeling Hint**: Since MySQL is relational and does not have native array types, you may model `line_items` and `status_history` using separate relational tables (e.g., `order_items` and `order_status_history` tables) or leverage MySQL's native `JSON` column data type. Document your design choice in `DECISIONS.md`.
+> **SQLite Modeling Hint**: Since SQLite is relational, you may model `line_items` and `status_history` using separate relational tables (e.g., `order_items` and `order_status_history` tables) or leverage SQLite's native `JSON` support. Document your design choice in `DECISIONS.md`.
 
 ### 6. Workflow Engine (State Machine)
 
