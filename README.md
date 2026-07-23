@@ -126,6 +126,7 @@ Provide an interface that allows an ops user to:
 Please submit your work via a Git repository link.
 - **Code & Commit History**: Full implementation with incremental commit history (do not squash into a single commit).
 - **README.md**: Clear setup and run instructions. Someone who has never seen the code should be able to spin it up using one or two commands.
+- **UAT Verification**: All API endpoints and behavior flows must be verified against the [User Acceptance Testing (UAT) Manual](UAT.md).
 - **Automated Tests**: Minimum coverage must include valid/invalid state transitions and the concurrency/no-oversell behavior.
 - **DECISIONS.md**: A short document detailing your architecture choices, your database-level concurrency strategy, and what you would change given more time/scale.
 - **Live Walkthrough**: Be prepared for a 15–20 minute session where you will run the app and demonstrate the workflow paths, edge cases, and manual overrides.
